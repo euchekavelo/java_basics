@@ -1,3 +1,5 @@
+package ru.skillbox;
+
 public class Elevator {
 
     private int currentFloor = 1;
@@ -27,28 +29,36 @@ public class Elevator {
 
     public void move(int floor)
     {
+        //Проверяем - находится ли требуемый этаж строго в диапазоне между минимальным и максимальным этажами.
         if (floor >= minFloor && floor <= maxFloor)
         {
+            //Определим текущий этаж, на котором находится лифт
             int currentFloor = getCurrentFloor();
+
+            //Если текущий этаж лифта меньше требуемого этажа, тогда постепенно поднимаем лифт,
+            //вызывая метод "moveUp", а также выводим текущий этаж.
             if (currentFloor < floor)
             {
                 for (int i = currentFloor; i < floor; i++)
                 {
                     moveUp();
-                    System.out.println(getCurrentFloor());
+                    System.out.println("Текущий этаж: " + getCurrentFloor());
                 }
             }
+            //Иначе постепенно опускаем лифт, вызывая метод "moveDown" и выводя текущий этаж.
             else
             {
                 for (int i = currentFloor; i > floor; i--)
                 {
                     moveDown();
+                    System.out.println("Текущий этаж: " + getCurrentFloor());
                 }
             }
         }
         else
         {
-            System.out.println("Требуемый этаж указан неверно");
+            //Выводим в консоль сообщение об ошибке, если требуемый этаж не входит в заданный диапазон
+            System.out.println("Требуемый этаж указан неверно.");
         }
     }
 }
