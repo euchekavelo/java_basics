@@ -9,7 +9,9 @@ public class Main {
         while(true) {
             System.out.print("Введите номер этажа: ");
             int floor = new Scanner(System.in).nextInt();
-            elevator.move(floor);
+            System.out.print("Введите общий вес: ");
+            double currentWeight = new Scanner(System.in).nextDouble();
+            elevator.move(floor, currentWeight);
         }
     }
 }

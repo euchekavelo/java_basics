@@ -5,6 +5,8 @@ public class Elevator {
     private int currentFloor = 1;
     private int minFloor;
     private int maxFloor;
+    private double limitWeight = 400.0; //Лимит веса кг
+    private int emergencyFloor = 15; //Аварийный этаж
 
     public Elevator(int minFloor, int maxFloor)
     {
@@ -17,42 +19,90 @@ public class Elevator {
        return currentFloor;
     }
 
-    public void moveDown()
+    public boolean moveDown(double weight)
     {
-        currentFloor = currentFloor - 1;
+        if (currentFloor != emergencyFloor)
+        {
+            if (weight <= limitWeight)
+            {
+                int nextFloor = currentFloor - 1;
+                if (nextFloor >= minFloor && nextFloor != emergencyFloor) {
+                    currentFloor = nextFloor;
+                    System.out.println("Текущий этаж: " + currentFloor);
+                    return true;
+                }
+                else {
+                    System.out.println("Этаж " + nextFloor + " является аварийным. Движение дальше запрещено.");
+                    return false;
+                }
+            }
+            else
+            {
+                System.out.println("Лифт перегружен! Движение невозможно.");
+                return false;
+            }
+        }
+        else {
+            System.out.println("Лифт не работает!");
+            return false;
+        }
     }
 
-    public void moveUp()
+    public boolean moveUp(double weight)
     {
-        currentFloor = currentFloor + 1;
+        if (currentFloor != emergencyFloor)
+        {
+           if (weight <= limitWeight)
+           {
+               int nextFloor = currentFloor + 1;
+               if (nextFloor <= maxFloor && nextFloor != emergencyFloor) {
+                   currentFloor = nextFloor;
+                   System.out.println("Текущий этаж: " + currentFloor);
+                   return true;
+               }
+               else {
+                   System.out.println("Этаж " + nextFloor + " является аварийным. Движение дальше запрещено.");
+                   return false;
+               }
+           }
+           else
+           {
+               System.out.println("Лифт перегружен! Движение невозможно.");
+               return false;
+           }
+        }
+        else {
+            System.out.println("Лифт не работает!");
+            return false;
+        }
     }
 
-    public void move(int floor)
+    public void move(int floor, double currentWeight)
     {
         //Проверяем - находится ли требуемый этаж строго в диапазоне между минимальным и максимальным этажами.
         if (floor >= minFloor && floor <= maxFloor)
         {
             //Определим текущий этаж, на котором находится лифт
             int currentFloor = getCurrentFloor();
-
-            //Если текущий этаж лифта меньше требуемого этажа, тогда постепенно поднимаем лифт,
-            //вызывая метод "moveUp", а также выводим текущий этаж.
-            if (currentFloor < floor)
+            boolean movementComplete;
+            //постепенно поднимаем лифт, вызывая метод "moveUp", а также выводим текущий этаж.
+            while(currentFloor < floor)
             {
-                for (int i = currentFloor; i < floor; i++)
-                {
-                    moveUp();
-                    System.out.println("Текущий этаж: " + getCurrentFloor());
-                }
+                movementComplete = moveUp(currentWeight);
+                if (movementComplete)
+                    currentFloor++;
+                else
+                    break;
             }
-            //Иначе постепенно опускаем лифт, вызывая метод "moveDown" и выводя текущий этаж.
-            else
+
+            //Постепенно опускаем лифт, вызывая метод "moveDown" и выводя текущий этаж.
+            while(currentFloor > floor)
             {
-                for (int i = currentFloor; i > floor; i--)
-                {
-                    moveDown();
-                    System.out.println("Текущий этаж: " + getCurrentFloor());
-                }
+                movementComplete = moveDown(currentWeight);
+                if (movementComplete)
+                    currentFloor--;
+                else
+                    break;
             }
         }
         else
