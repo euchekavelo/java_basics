@@ -7,6 +7,7 @@ public class Book {
     private final int amountPages;
     private final long isbnNumber;
 
+
     public Book(String name, String author, int amountPages, long isbnNumber)
     {
         this.name = name;
