@@ -4,14 +4,39 @@ public class Main {
 
         //Задание №1
         System.out.println("Задание №1");
+
+        //Корзина №1
         Basket basket = new Basket();
         basket.add("Milk", 40, 2, 0.250);
         basket.add("Chocolate", 55, 0.05);
         basket.add("Package", 5, 15);
         basket.add("Little package", 2);
         basket.add("Ice cream", 360, 0.6);
-        basket.print("Корзина");
-        System.out.println("Общий вес корзины: " + basket.getTotalWeight() + " кг.\n");
+        basket.print("Корзина №1");
+        System.out.println("Общий вес корзины: " + basket.getTotalWeight() + " кг.");
+        System.out.println();
+
+        //Корзина №2
+        Basket secondBasket = new Basket();
+        secondBasket.add("Milk", 40, 3, 0.250);
+        secondBasket.print("Корзина №2");
+        System.out.println();
+
+        //Корзина №3
+        Basket thirdBasket = new Basket();
+        thirdBasket.add("Chicken", 300, 0.869);
+        thirdBasket.add("Coffee", 120, 0.200);
+        thirdBasket.print("Корзина №3");
+        System.out.println();
+
+        //Вывод общей информации путем использования методов класса "Basket"
+        System.out.println( "Количество корзин: " + Basket.getCount());
+        System.out.println("Общее количество всех товаров во всех корзинах: " + Basket.getTotalCountAllItems() + " шт.");
+        System.out.println("Общая стоимость всех товаров во всех корзинах: " + Basket.getTotalPriceAllItems() + " р.");
+        System.out.println("Средняя цена товара во всех корзинах: " + Basket.getAveragePriceProduct() + " р.");
+        System.out.println("Средняя стоимость корзины: " + Basket.getAverageBasketPrice() + " р.\n");
+
+
 
         //Задание №2
         System.out.println("Задание №2");

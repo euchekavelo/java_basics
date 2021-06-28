@@ -8,6 +8,48 @@ public class Basket {
     //Общая масса всех товаров в корзине
     private double totalWeight = 0;
 
+    //Общая стоимость всех товаров во всех корзинах
+    private static int totalPriceAllItems = 0;
+    //Общее количество всех товаров во всех корзинах
+    private static int totalCountAllItems = 0;
+
+    public static void increaseTotalPriceAllItems(int price)
+    {
+        Basket.totalPriceAllItems = Basket.totalPriceAllItems + price;
+    }
+
+    public static int getTotalPriceAllItems()
+    {
+        return totalPriceAllItems;
+    }
+
+    public static void increaseTotalCountAllItems(int count)
+    {
+        Basket.totalCountAllItems = Basket.totalCountAllItems + count;
+    }
+
+    public static int getTotalCountAllItems()
+    {
+        return totalCountAllItems;
+    }
+
+    //Получить среднюю цену товара во всех корзинах
+    public static String getAveragePriceProduct()
+    {
+        double averagePrice = (double) totalPriceAllItems / (double) totalCountAllItems;
+        String roundedAveragePrice = String.format("%.2f", averagePrice);
+        return roundedAveragePrice;
+    }
+
+    //Получить среднюю стоимость корзины
+    public static String getAverageBasketPrice()
+    {
+        double AverageBasketPrice = (double) totalPriceAllItems / (double) count;
+        String roundedAverageBasketPrice = String.format("%.2f", AverageBasketPrice);
+        return roundedAverageBasketPrice;
+    }
+
+
     public Basket() {
         increaseCount(1);
         items = "Список товаров:";
@@ -17,12 +59,14 @@ public class Basket {
     public Basket(int limit) {
         this();
         this.limit = limit;
+        increaseCount(1);
     }
 
     public Basket(String items, int totalPrice) {
         this();
         this.items = this.items + items;
         this.totalPrice = totalPrice;
+        increaseCount(1);
     }
 
     public static int getCount() {
@@ -70,6 +114,9 @@ public class Basket {
 
         //Подсчитываем общую массу товаров в корзине
         totalWeight = totalWeight + count * weight;
+
+        increaseTotalCountAllItems(count);
+        increaseTotalPriceAllItems(count * price);
     }
 
     public void clear() {
