@@ -20,45 +20,33 @@ public class Main {
         контейнеров - 1 шт.
         */
 
+        final int CONTAINERS_IN_TRUCK = 12;
+        final int BOXES_IN_CONTAINER = 27;
 
         double amountBoxes = Double.parseDouble(boxes); //Количество ящиков, полученное от пользователя (строка преобразована в примитив "Double").
-        double amountContainers = Math.ceil(amountBoxes / 27); //Количество контейнеров
-        double amountTrucks = Math.ceil(amountContainers / 12); //Количество грузовиков
 
-        int numberContainer = 1; //Начальный номер первого контейнера
-        int numberBox = 1; //Начальный номер первого ящика
-
-        for (int i = 1; i <= amountTrucks; i++)
+        int amountContainers = amountBoxes > 0 ? 1 : 0; //Начальное количество контейнеров
+        int amountTrucks = amountBoxes > 0 ? 1 : 0; //Начальное количесвто грузовиков
+        String result = "Грузовик: " + amountTrucks + "\n\tКонтейнер: " + amountContainers + "\n";
+        for (int i = 1; i <= amountBoxes; i++)
         {
-            System.out.println("Грузовик: " + i);
-
-            for (numberContainer = numberContainer; numberContainer <= amountContainers; numberContainer++)
-            {
-                System.out.println("\tКонтейнер: " + numberContainer);
-                int currentBox = 1; //Первый ящик в контейнере
-
-                while (currentBox <= 27)
-                {
-                    if (numberBox <= amountBoxes)
-                    {
-                        System.out.println("\t\tЯщик: " + numberBox);
-                        numberBox++;
-                        currentBox++;
-                    }
-                    else
-                        break;
-                }
-
-                if (numberContainer == 12) {
-                    numberContainer = ++numberContainer;
-                    break;
-                }
-            }
+            result = result + "\t\tЯщик: " + i + "\n";
+            if (i % BOXES_IN_CONTAINER == 0 )
+              {
+                  if (i != amountBoxes) {
+                      if (amountContainers % CONTAINERS_IN_TRUCK != 0) {
+                          result = result + "\tКонтейнер: " + ++amountContainers + "\n";
+                      } else {
+                          result = result + "Грузовик: " + ++amountTrucks + "\n\tКонтейнер: " + ++amountContainers + "\n";
+                      }
+                  }
+              }
         }
 
-        System.out.println("Необходимо:\nгрузовиков - " + (int) amountTrucks
-                                + " шт.\nконтейнеров - " + (int) amountContainers + " шт.");
+        if (amountBoxes > 0)
+            System.out.print(result);
 
-    }
-
+        System.out.println("Необходимо:\nгрузовиков - " + amountTrucks
+                + " шт.\nконтейнеров - " + amountContainers + " шт.");
+        }
 }
