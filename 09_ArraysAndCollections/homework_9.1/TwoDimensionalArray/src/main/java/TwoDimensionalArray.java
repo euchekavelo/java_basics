@@ -9,6 +9,23 @@ public class TwoDimensionalArray {
         // [ , X,  ]
         // [X,  , X]
 
-        return new char[0][0];
+        char[][] dimensionalArray = new char[size][size];
+
+        for (int i = 0; i < dimensionalArray.length; i++)
+        {
+            int currentIteration = i;
+            for (int j = 0; j < dimensionalArray[i].length; j++)
+            {
+                if (j == currentIteration)
+                {
+                    dimensionalArray[i][j] = symbol;
+                    dimensionalArray[i][dimensionalArray[i].length - 1 - currentIteration] = symbol;
+                }
+                else if (dimensionalArray[i][j] == 0)
+                    dimensionalArray[i][j] = ' ';
+            }
+        }
+
+        return dimensionalArray;
     }
 }
