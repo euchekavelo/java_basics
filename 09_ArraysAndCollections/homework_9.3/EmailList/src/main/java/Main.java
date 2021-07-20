@@ -1,8 +1,10 @@
 import java.util.Scanner;
 
 public class Main {
+
     public static final String WRONG_EMAIL_ANSWER = "Неверный формат email";
-    
+    public static EmailList emailList = new EmailList();
+
     /* TODO:
         Пример вывода списка Email, после ввода команды LIST в консоль:
         test@test.com
@@ -18,6 +20,7 @@ public class Main {
     */
 
     public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
         
         while (true) {
@@ -25,9 +28,22 @@ public class Main {
             if (input.equals("0")) {
                 break;
             }
-            
+
             //TODO: write code here
-            
+            String prefixAdd = "ADD ";
+            String regexList = "LIST";
+
+            if (input.startsWith(prefixAdd))
+            {
+                int lengthInput = input.length();
+                String textLine = input.substring(input.indexOf(" ") + 1, lengthInput);
+                emailList.add(textLine);
+            }
+            else if (input.matches(regexList))
+            {
+                emailList.list(emailList.getSortedEmails());
+            }
+
         }
     }
 }
