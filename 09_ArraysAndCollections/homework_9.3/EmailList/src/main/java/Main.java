@@ -1,9 +1,8 @@
-import java.util.Scanner;
-
 public class Main {
 
-    public static final String WRONG_EMAIL_ANSWER = "Неверный формат email";
-    public static EmailList emailList = new EmailList();
+    public final static String WRONG_EMAIL_ANSWER = "Неверный формат email";
+    private final static String COMMAND_ADD = "ADD ";
+    private final static String COMMAND_LIST = "LIST";
 
     /* TODO:
         Пример вывода списка Email, после ввода команды LIST в консоль:
@@ -21,29 +20,20 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
-        
+        EmailList emailList = new EmailList();
+
         while (true) {
-            String input = scanner.nextLine();
-            if (input.equals("0")) {
-                break;
-            }
-
-            //TODO: write code here
-            String prefixAdd = "ADD ";
-            String regexList = "LIST";
-
-            if (input.startsWith(prefixAdd))
+            String userInput = UserInput.getLine();
+            if (userInput.startsWith(COMMAND_ADD))
             {
-                int lengthInput = input.length();
-                String textLine = input.substring(input.indexOf(" ") + 1, lengthInput);
-                emailList.add(textLine);
+                emailList.add(userInput.replaceFirst(COMMAND_ADD, "").trim());
             }
-            else if (input.matches(regexList))
+            else if (userInput.equals(COMMAND_LIST))
             {
-                emailList.list(emailList.getSortedEmails());
+                emailList.printList(emailList.getSortedEmails());
             }
-
+            else
+                System.out.println("Введена неверная команда");
         }
     }
 }

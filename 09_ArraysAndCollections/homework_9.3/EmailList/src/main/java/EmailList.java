@@ -1,15 +1,12 @@
 import java.util.*;
-import java.util.function.Consumer;
 
 public class EmailList {
 
-    private Set<String> emailList = new TreeSet<>();
+    private final static String REGEX_EMAIL = "\\p{Alpha}\\p{Alnum}*@\\p{Alpha}+\\.(\\p{Alpha}){2,}";
+    private final Set<String> emailList = new TreeSet<>();
 
     public void add(String email) {
-
-        // TODO: валидный формат email добавляется
-        String regex = "\\p{Alpha}\\p{Alnum}*@\\p{Alpha}+\\.(\\p{Alpha}){2,}";
-        if (email.matches(regex))
+        if (email.matches(REGEX_EMAIL))
         {
             emailList.add(email.toLowerCase());
         }
@@ -18,18 +15,15 @@ public class EmailList {
     }
 
     public List<String> getSortedEmails() {
-
-        // TODO: возвращается список электронных адресов в алфавитном порядке
         return new ArrayList<>(emailList);
     }
 
-    public void list(List<String> arrayList)
+    public void printList(List<String> arrayList)
     {
-        arrayList.forEach(new Consumer<String>() {
-            @Override
-            public void accept(String s) {
-                System.out.println(s);
-            }
-        });
+        String outLine = "";
+        for (String line : arrayList)
+            outLine = outLine.concat(line + System.lineSeparator());
+
+        System.out.println(outLine.trim());
     }
 }
