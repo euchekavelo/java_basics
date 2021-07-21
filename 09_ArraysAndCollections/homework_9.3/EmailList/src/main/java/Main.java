@@ -30,7 +30,7 @@ public class Main {
             }
             else if (userInput.equals(COMMAND_LIST))
             {
-                emailList.printList(emailList.getSortedEmails());
+                emailList.printList();
             }
             else
                 System.out.println("Введена неверная команда");

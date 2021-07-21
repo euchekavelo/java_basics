@@ -18,10 +18,10 @@ public class EmailList {
         return new ArrayList<>(emailList);
     }
 
-    public void printList(List<String> arrayList)
+    public void printList()
     {
         String outLine = "";
-        for (String line : arrayList)
+        for (String line : emailList)
             outLine = outLine.concat(line + System.lineSeparator());
 
         System.out.println(outLine.trim());
