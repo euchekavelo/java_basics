@@ -7,27 +7,20 @@ public class DepositAccount extends BankAccount {
 
     protected void put(double amountToPut)
     {
-        if (amountToPut > 0.0)
-        {
-            amount += amountToPut;
-            lastIncome = LocalDate.now();
-        }
-        else
-            System.out.println("Операция пополнения невозможна. Пополняемая сумма должна быть больше 0.");
+        lastIncome = LocalDate.now();
+        super.put(amountToPut);
     }
 
     protected boolean take(double amountToTake)
     {
         LocalDate currentDate = LocalDate.now();
-        if (amountToTake <= amount && amountToTake > 0.0 && lastIncome.until(currentDate, ChronoUnit.MONTHS) >= 1)
+        if (lastIncome.until(currentDate, ChronoUnit.MONTHS) >= 1)
         {
-            amount -= amountToTake;
-            return true;
+            return super.take(amountToTake);
         }
         else
         {
-            System.out.println("Операция списания невозможна. Сумма списания меньше 0 или превышает остаток на счете, " +
-                    "либо прошло менее месяца с момента последнего пополнения счета.");
+            System.out.println("Операция списания невозможна. Прошло менее месяца с момента последнего пополнения счета.");
             return false;
         }
     }
