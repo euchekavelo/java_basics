@@ -1,15 +1,50 @@
 public class BankAccount {
 
-  public double getAmount() {
-    //TODO: реализуйте метод и удалите todo
-    return 0;
+  protected double amount = 0.0;
+
+  public double getAmount()
+  {
+    return amount;
   }
 
-  public void put(double amountToPut) {
-    //TODO: реализуйте метод и удалите todo
+  public void put(double amountToPut)
+  {
+    if (amountToPut > 0.0)
+    {
+      amount += amountToPut;
+    }
+    else
+        System.out.println("Операция пополнения невозможна. Пополняемая сумма должна быть больше 0.");
   }
 
-  public void take(double amountToTake) {
-    //TODO: реализуйте метод и удалите todo
+  public boolean take(double amountToTake)
+  {
+    if (amountToTake <= amount && amountToTake > 0.0)
+    {
+      amount -= amountToTake;
+      return true;
+    }
+    else
+    {
+      System.out.println("Операция списания невозможна. Сумма списания меньше 0 или превышает остаток на счете.");
+      return false;
+    }
   }
+
+  public boolean send(BankAccount receiver, double amount)
+  {
+    boolean operationPossible = take(amount);
+    if (operationPossible)
+    {
+      receiver.put(amount);
+      System.out.println("Перевод средств успешно выполнен.");
+      return true;
+    }
+    else
+    {
+      System.out.println("Перевод средств не удалось выполнить.");
+      return false;
+    }
+  }
+
 }
