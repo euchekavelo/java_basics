@@ -5,7 +5,7 @@ public class DepositAccount extends BankAccount {
 
     private LocalDate lastIncome;
 
-    public void put(double amountToPut)
+    protected void put(double amountToPut)
     {
         if (amountToPut > 0.0)
         {
@@ -16,7 +16,7 @@ public class DepositAccount extends BankAccount {
             System.out.println("Операция пополнения невозможна. Пополняемая сумма должна быть больше 0.");
     }
 
-    public boolean take(double amountToTake)
+    protected boolean take(double amountToTake)
     {
         LocalDate currentDate = LocalDate.now();
         if (amountToTake <= amount && amountToTake > 0.0 && lastIncome.until(currentDate, ChronoUnit.MONTHS) >= 1)

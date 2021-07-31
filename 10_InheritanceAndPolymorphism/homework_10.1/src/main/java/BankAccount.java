@@ -2,12 +2,12 @@ public class BankAccount {
 
   protected double amount = 0.0;
 
-  public double getAmount()
+  protected double getAmount()
   {
     return amount;
   }
 
-  public void put(double amountToPut)
+  protected void put(double amountToPut)
   {
     if (amountToPut > 0.0)
     {
@@ -17,7 +17,7 @@ public class BankAccount {
         System.out.println("Операция пополнения невозможна. Пополняемая сумма должна быть больше 0.");
   }
 
-  public boolean take(double amountToTake)
+  protected boolean take(double amountToTake)
   {
     if (amountToTake <= amount && amountToTake > 0.0)
     {
@@ -31,7 +31,7 @@ public class BankAccount {
     }
   }
 
-  public boolean send(BankAccount receiver, double amount)
+  protected boolean send(BankAccount receiver, double amount)
   {
     boolean operationPossible = take(amount);
     if (operationPossible)

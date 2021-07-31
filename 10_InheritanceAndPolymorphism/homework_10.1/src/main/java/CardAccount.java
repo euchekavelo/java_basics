@@ -1,6 +1,6 @@
 public class CardAccount extends BankAccount {
 
-    public boolean take(double amountToTake)
+    protected boolean take(double amountToTake)
     {
         if (amountToTake * 1.01 <= amount && amountToTake > 0.0)
         {
