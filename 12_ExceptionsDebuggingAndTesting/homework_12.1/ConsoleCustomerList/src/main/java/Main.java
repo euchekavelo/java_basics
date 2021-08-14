@@ -13,16 +13,25 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         CustomerStorage executor = new CustomerStorage();
 
-        while (true) {
+       while (true) {
             String command = scanner.nextLine();
             String[] tokens = command.split("\\s+", 2);
 
-            if (tokens[0].equals("add")) {
-                executor.addCustomer(tokens[1]);
+            if (tokens[0].equals("add")) { //Команда может выбросить также исключение ArrayIndexOutOfBoundsException
+                try {
+                    executor.addCustomer(tokens[1]);
+                } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
+                    System.out.println(e.getMessage());
+                }
+
             } else if (tokens[0].equals("list")) {
                 executor.listCustomers();
-            } else if (tokens[0].equals("remove")) {
-                executor.removeCustomer(tokens[1]);
+            } else if (tokens[0].equals("remove")) { //Команда может выбросить исключение ArrayIndexOutOfBoundsException
+                try {
+                    executor.removeCustomer(tokens[1]);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println(e.getMessage());
+                }
             } else if (tokens[0].equals("count")) {
                 System.out.println("There are " + executor.getCount() + " customers");
             } else if (tokens[0].equals("help")) {
@@ -30,6 +39,7 @@ public class Main {
             } else {
                 System.out.println(COMMAND_ERROR);
             }
-        }
+       }
+
     }
 }
