@@ -2,6 +2,8 @@ import core.Line;
 import core.Station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -14,7 +16,9 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static final Logger LOGGER  = LogManager.getRootLogger();
+    private static final Logger LOGGER  = LogManager.getLogger(Main.class);
+    private static final Marker INPUT_HISTORY_MARKER = MarkerManager.getMarker("INPUT_HISTORY");
+    private static final Marker INVALID_STATIONS_MARKER = MarkerManager.getMarker("INVALID_STATIONS");
     private static final String DATA_FILE = "src/main/resources/map.json";
     private static Scanner scanner;
 
@@ -65,10 +69,10 @@ public class Main {
             String line = scanner.nextLine().trim();
             Station station = stationIndex.getStation(line);
             if (station != null) {
-                LOGGER.info("Найдена введенная станция: " + station);
+                LOGGER.info(INPUT_HISTORY_MARKER,"Найдена введенная станция: {}", station);
                 return station;
             }
-            LOGGER.warn("Введена несуществующая станция: " + line);
+            LOGGER.info(INVALID_STATIONS_MARKER,"Введена несуществующая станция: {}", line);
             System.out.println("Станция не найдена :(");
         }
     }
@@ -88,7 +92,7 @@ public class Main {
             JSONArray connectionsArray = (JSONArray) jsonData.get("connections");
             parseConnections(connectionsArray);
         } catch (Exception ex) {
-            LOGGER.error("Получено исключение: " + ex);
+            LOGGER.error(ex);
             ex.printStackTrace();
         }
     }
@@ -147,7 +151,7 @@ public class Main {
             List<String> lines = Files.readAllLines(Paths.get(DATA_FILE));
             lines.forEach(line -> builder.append(line));
         } catch (Exception ex) {
-            LOGGER.error("Получено исключение: " + ex);
+            LOGGER.error(ex);
             ex.printStackTrace();
         }
         return builder.toString();
