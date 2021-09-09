@@ -13,20 +13,14 @@ public class WorkingWithSqlDatabase {
     }
 
     public void getInformationFromConnection(String query){
-        try {
-            Connection connection = DriverManager.getConnection(url, user, password);
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)){
             while (resultSet.next()){
                 String courseName = resultSet.getString(1);
                 String averageMonthsSales = resultSet.getString(2);
                 System.out.println(courseName + " - " + averageMonthsSales);
             }
-
-            resultSet.close();
-            statement.close();
-            connection.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
