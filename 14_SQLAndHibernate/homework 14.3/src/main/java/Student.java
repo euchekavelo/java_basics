@@ -23,6 +23,31 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private List<Subscription> subscriptionList;
 
+    @OneToMany(mappedBy = "student")
+    private List<LinkedPurchaseList> linkedPurchaseLists;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "LinkedPurchaseList",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private List<Course> courseListFromLinkedPurchaseList;
+
+    public List<Course> getCourseListFromLinkedPurchaseList() {
+        return courseListFromLinkedPurchaseList;
+    }
+
+    public void setCourseListFromLinkedPurchaseList(List<Course> courseListFromLinkedPurchaseList) {
+        this.courseListFromLinkedPurchaseList = courseListFromLinkedPurchaseList;
+    }
+
+    public List<LinkedPurchaseList> getLinkedPurchaseLists() {
+        return linkedPurchaseLists;
+    }
+
+    public void setLinkedPurchaseLists(List<LinkedPurchaseList> linkedPurchaseLists) {
+        this.linkedPurchaseLists = linkedPurchaseLists;
+    }
+
     public List<Subscription> getSubscriptionList() {
         return subscriptionList;
     }

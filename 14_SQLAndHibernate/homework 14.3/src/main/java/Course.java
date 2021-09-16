@@ -19,7 +19,7 @@ public class Course {
 
     private String description;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Teacher teacher;
 
     @Column(name = "students_count")
@@ -38,6 +38,28 @@ public class Course {
 
     @OneToMany(mappedBy = "course")
     List<Subscription> subscriptionList;
+
+    @OneToMany(mappedBy = "course")
+    List<LinkedPurchaseList> linkedPurchaseLists;
+
+    @ManyToMany(mappedBy = "courseListFromLinkedPurchaseList")
+    private List<Student> studentsListFromLinkedPurchaseList;
+
+    public List<Student> getStudentsListFromLinkedPurchaseList() {
+        return studentsListFromLinkedPurchaseList;
+    }
+
+    public void setStudentsListFromLinkedPurchaseList(List<Student> studentsListFromLinkedPurchaseList) {
+        this.studentsListFromLinkedPurchaseList = studentsListFromLinkedPurchaseList;
+    }
+
+    public List<LinkedPurchaseList> getLinkedPurchaseLists() {
+        return linkedPurchaseLists;
+    }
+
+    public void setLinkedPurchaseLists(List<LinkedPurchaseList> linkedPurchaseLists) {
+        this.linkedPurchaseLists = linkedPurchaseLists;
+    }
 
     public List<Subscription> getSubscriptionList() {
         return subscriptionList;
