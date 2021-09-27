@@ -1,35 +1,35 @@
 import junit.framework.TestCase;
 import org.junit.Before;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BankTest extends TestCase {
 
     Bank bank = new Bank();
-    private Map<String, Account> accounts = new HashMap<>();
+    private final Map<String, Account> accounts = new ConcurrentHashMap<>();
 
     @Before
     public void setUp() throws Exception {
         Account account1 = new Account();
         account1.setMoney(250000);
         account1.setAccNumber(Integer.toString(0));
-        accounts.put(Integer.toString(0), account1);
+        accounts.putIfAbsent(Integer.toString(0), account1);
 
         Account account2 = new Account();
         account2.setMoney(350000);
         account2.setAccNumber(Integer.toString(1));
-        accounts.put(Integer.toString(1), account2);
+        accounts.putIfAbsent(Integer.toString(1), account2);
 
         Account account3 = new Account();
         account3.setMoney(350000);
         account3.setAccNumber(Integer.toString(2));
-        accounts.put(Integer.toString(2), account3);
+        accounts.putIfAbsent(Integer.toString(2), account3);
 
         Account account4 = new Account();
         account4.setMoney(450000);
         account4.setAccNumber(Integer.toString(3));
-        accounts.put(Integer.toString(3), account4);
+        accounts.putIfAbsent(Integer.toString(3), account4);
 
         bank.setAccounts(accounts);
     }

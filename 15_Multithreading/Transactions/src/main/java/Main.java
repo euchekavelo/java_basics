@@ -1,5 +1,5 @@
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Main {
 
@@ -44,14 +44,14 @@ public class Main {
      * @return - заполненная карта аккаунтов.
      */
     private static Map<String, Account> getGeneratedAccountMap(int countAccounts){
-        Map<String, Account> accountMap = new HashMap<>();
+        Map<String, Account> accountMap = new ConcurrentHashMap<>();
         for (int i = 0; i < countAccounts; i++){
             long randomValueMoney = (long) (Math.random() * 100000 + 20000);
             Account account = new Account();
             account.setMoney(randomValueMoney);
             account.setAccNumber(Integer.toString(i));
 
-            accountMap.put(Integer.toString(i), account);
+            accountMap.putIfAbsent(Integer.toString(i), account);
         }
 
         return accountMap;
