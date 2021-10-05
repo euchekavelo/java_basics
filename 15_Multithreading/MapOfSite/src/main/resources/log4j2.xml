@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <File name="SearchLink" fileName="logs/search.log">
+            <Filters>
+                <MarkerFilter marker="LINK_PARSING"/>
+            </Filters>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+        <File name="Exceptions" fileName="logs/exceptions.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+    </appenders>
+
+    <loggers>
+        <root level="info">
+            <appender-ref ref="SearchLink"/>
+            <appender-ref ref="Exceptions" level="error"/>
+        </root>
+    </loggers>
+</configuration>
