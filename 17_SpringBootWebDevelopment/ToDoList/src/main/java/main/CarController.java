@@ -1,25 +1,34 @@
 package main;
 
+import main.model.CarRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import response.Car;
+import main.model.Car;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class CarController {
+
+    @Autowired
+    CarRepository carRepository;
 
     /**
      * Получение списка всех машин.
      */
     @GetMapping("/cars")
     public ResponseEntity<?> getCarsList(){
-        List<Car> carsList = Storage.getAllCars();
+        Iterable<Car> carIterable = carRepository.findAll();
+        List<Car> carsList = new ArrayList<>();
+        carIterable.forEach(carsList::add);
         if (carsList.isEmpty()){
             return new ResponseEntity<>("Список машин пуст.", HttpStatus.OK);
         }
-        return new ResponseEntity<>(Storage.getAllCars(), HttpStatus.OK);
+        return new ResponseEntity<>(carsList, HttpStatus.OK);
     }
 
     /**
@@ -27,7 +36,10 @@ public class CarController {
      */
     @PostMapping("/cars")
     public ResponseEntity<Integer> addCar(Car car){
-        return new ResponseEntity<>(Storage.addCar(car), HttpStatus.OK);
+        car.setName("Car");
+        car.setYear(1994);
+        Car newCar = carRepository.save(car);
+        return new ResponseEntity<>(newCar.getId(), HttpStatus.OK);
     }
 
     /**
@@ -35,15 +47,20 @@ public class CarController {
      */
     @PutMapping("/cars")
     public ResponseEntity<String> updateAllCars(){
-        List<Car> carsList = Storage.getAllCars();
-        if (carsList.isEmpty()){
+        Iterable<Car> carIterable = carRepository.findAll();
+        List<Car> carList = new ArrayList<>();
+        carIterable.forEach(carList::add);
+        if (carList.isEmpty()){
             return new ResponseEntity<>("Невозможно провести обновление списка машин (список пуст).",
                     HttpStatus.METHOD_NOT_ALLOWED);
-        } else {
-            Storage.updateAllCars();
-            return new ResponseEntity<>("Наименование всех машин обновлено (добавлено \"(Updated name)\")",
-                    HttpStatus.OK);
         }
+        carIterable.forEach(car -> {
+            String newCarName = car.getName() + "(Updated name)";
+            car.setName(newCarName);
+        });
+        carRepository.saveAll(carIterable);
+        return new ResponseEntity<>("Наименование всех машин обновлено (добавлено \"(Updated name)\")",
+                HttpStatus.OK);
     }
 
     /**
@@ -51,7 +68,7 @@ public class CarController {
      */
     @DeleteMapping("/cars")
     public ResponseEntity<String> deleteAllCars(){
-        Storage.deleteAllCars();
+        carRepository.deleteAll();
         return new ResponseEntity<>("Выполнено удаление всех машин из списка.", HttpStatus.OK);
     }
 
@@ -60,11 +77,11 @@ public class CarController {
      */
     @GetMapping("/cars/{id}")
     public ResponseEntity<?> getCar(@PathVariable int id){
-        Car car = Storage.getCar(id);
-        if (car == null){
+        Optional<Car> carOptional = carRepository.findById(id);
+        if (!carOptional.isPresent()){
             return new ResponseEntity<>("Машина с указанным id не найдена.", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(car, HttpStatus.OK);
+        return new ResponseEntity<>(carOptional.get(), HttpStatus.OK);
     }
 
     /**
@@ -80,15 +97,20 @@ public class CarController {
      */
     @PutMapping("/cars/{id}")
     public ResponseEntity<String> updateCar(@PathVariable int id){
-        Car car = Storage.getCar(id);
-        if (car == null){
+        Optional<Car> carOptional = carRepository.findById(id);
+        if (!carOptional.isPresent()){
             return new ResponseEntity<>("Обновление не выполнено. Машина с указанным id не найдена.",
                     HttpStatus.NOT_FOUND);
-        } else {
-            Storage.updateCar(car);
-            return new ResponseEntity<>("Обновление данных машины с указанным id успешно выполнено.",
-                    HttpStatus.OK);
         }
+
+        //обновляем параметры машины
+        Car updatedCar = carOptional.get();
+        updatedCar.setName(updatedCar.getName() + "(Single update)");
+        updatedCar.setYear(2021);
+        carRepository.save(updatedCar);
+
+        return new ResponseEntity<>("Обновление данных машины с указанным id успешно выполнено.",
+                HttpStatus.OK);
     }
 
     /**
@@ -96,14 +118,13 @@ public class CarController {
      */
     @DeleteMapping("/cars/{id}")
     public ResponseEntity<String> deleteCar(@PathVariable int id){
-        Car car = Storage.getCar(id);
-        if (car == null){
+        Optional<Car> carOptional = carRepository.findById(id);
+        if (!carOptional.isPresent()){
             return new ResponseEntity<>("Удаление невозможно. Машина с указанным id не найдена.",
                     HttpStatus.NOT_FOUND);
-        } else {
-            Storage.deleteCar(id);
-            return new ResponseEntity<>("Удаление машины с указанным id успешно выполнено.",
-                    HttpStatus.OK);
         }
+        carRepository.deleteById(id);
+        return new ResponseEntity<>("Удаление машины с указанным id успешно выполнено.",
+                HttpStatus.OK);
     }
 }
