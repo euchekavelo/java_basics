@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+</head>
+<body>
+    <div class="cars-list">
+        <div style="font-size: 24px; font-family: Arial">Список машин</div>
+        <div th:switch="${countCars}">
+            <div th:case="0">Список машин пуст.</div>
+            <div th:case="*">
+                <div th:each="car : ${carsList}">
+                    <a href="#" class="car-link" th:attr="data-id=${car.id}"
+                       th:text="'id: ' + ${car.id} + '; ' + 'name: ' + ${car.name} + '; ' + 'year: ' + ${car.year}" ></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
