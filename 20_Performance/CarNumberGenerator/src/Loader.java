@@ -1,41 +1,26 @@
-import java.io.FileOutputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Loader {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws InterruptedException {
         long start = System.currentTimeMillis();
 
-        FileOutputStream writer = new FileOutputStream("res/numbers.txt");
-
-        char letters[] = {'У', 'К', 'Е', 'Н', 'Х', 'В', 'А', 'Р', 'О', 'С', 'М', 'Т'};
-        for (int number = 1; number < 1000; number++) {
-            int regionCode = 199;
-            for (char firstLetter : letters) {
-                for (char secondLetter : letters) {
-                    for (char thirdLetter : letters) {
-                        String carNumber = firstLetter + padNumber(number, 3) +
-                            secondLetter + thirdLetter + padNumber(regionCode, 2);
-                        writer.write(carNumber.getBytes());
-                        writer.write('\n');
-                    }
-                }
-            }
+        //Сформируем исполнитель с 3 потоками, куда отправим задачи для асинхронного исполнения.
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+        for (int i = 0; i < 3; i++){
+            FileFormation fileFormation = new FileFormation(i);
+            executor.execute(fileFormation);
         }
 
-        writer.flush();
-        writer.close();
+        //Инициируем завершение работы исполнителя после передачи в него задач.
+        executor.shutdown();
+
+        //Заблокируем основной поток до тех пор, пока все задачи не завершат выполнение
+        //после инициации запроса о завершении работы исполнителя.
+        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
 
         System.out.println((System.currentTimeMillis() - start) + " ms");
-    }
-
-    private static String padNumber(int number, int numberLength) {
-        String numberStr = Integer.toString(number);
-        int padSize = numberLength - numberStr.length();
-
-        for (int i = 0; i < padSize; i++) {
-            numberStr = '0' + numberStr;
-        }
-
-        return numberStr;
     }
 }
